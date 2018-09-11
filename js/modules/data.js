@@ -1,12 +1,21 @@
+/*jslint es6: true */
+/*jshint esversion: 6 */
+
+/**
+ * See LICENSE.md file for further details.
+ */
 import { config } from "./config";
-import * as d3 from './d3'
+import * as d3 from "./d3";
+
+export const SEX_MALE   = "M";
+export const SEX_FEMALE = "F";
 
 /**
  * Initialize the chart data.
  *
- * @param {object} data JSON encoded data
+ * @param {Object} data JSON encoded data
  *
- * @private
+ * @public
  */
 export function initData(data) {
     // Construct root node
@@ -17,19 +26,19 @@ export function initData(data) {
             // Fill up the missing children to the requested number of generations
             if (!d.children && (d.generation < rso.options.generations)) {
                 return [
-                    createEmptyNode(d.generation + 1, 'M'),
-                    createEmptyNode(d.generation + 1, 'F')
+                    createEmptyNode(d.generation + 1, SEX_MALE),
+                    createEmptyNode(d.generation + 1, SEX_FEMALE)
                 ];
             }
 
             // Add missing parent record if we got only one
             if (d.children && (d.children.length < 2)) {
-                if (d.children[0].sex === 'M') {
+                if (d.children[0].sex === SEX_MALE) {
                     // Append empty node if we got an father
-                    d.children.push(createEmptyNode(d.generation + 1, 'F'));
+                    d.children.push(createEmptyNode(d.generation + 1, SEX_FEMALE));
                 } else {
                     // Else prepend empty node
-                    d.children.unshift(createEmptyNode(d.generation + 1, 'M'));
+                    d.children.unshift(createEmptyNode(d.generation + 1, SEX_MALE));
                 }
             }
 
@@ -52,17 +61,19 @@ export function initData(data) {
 /**
  * Create an empty child node object.
  *
- * @param {number} generation Generation of the node
- * @param {string} sex
+ * @param {Number} generation Generation of the node
+ * @param {String} sex
  *
- * @return {object}
+ * @return {Object}
+ *
+ * @private
  */
 function createEmptyNode(generation, sex) {
     return {
         id         : 0,
-        xref       : '',
+        xref       : "",
         sex        : sex,
-        name       : '',
+        name       : "",
         generation : generation,
         color      : rso.options.defaultColor,
         colors     : [[], []]
