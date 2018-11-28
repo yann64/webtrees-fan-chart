@@ -67,8 +67,8 @@ export class Options {
         // Default degrees of the fan chart
         this.fanDegree = fanDegree;
 
-        this.startPi = -(this.fanDegree / 2 * MATH_DEG2RAD);
-        this.endPi   =  (this.fanDegree / 2 * MATH_DEG2RAD);
+        this.startPi = -(0 * MATH_DEG2RAD);
+        this.endPi   =  (this.fanDegree / 1 * MATH_DEG2RAD);
 
         // Scale the angles linear across the circle
         this.x = d3.scaleLinear().range([this.startPi, this.endPi]);

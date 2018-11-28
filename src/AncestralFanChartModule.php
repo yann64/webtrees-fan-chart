@@ -204,7 +204,7 @@ class AncestralFanChartModule extends AbstractModule implements ModuleChartInter
 
         $this->fanDegree = (int) $request->get('fanDegree', 210);
         $this->fanDegree = min($this->fanDegree, 360);
-        $this->fanDegree = max($this->fanDegree, 180);
+        $this->fanDegree = max($this->fanDegree, 90);
 
         $this->fontScale = (int) $request->get('fontScale', 100);
         $this->fontScale = min($this->fontScale, 200);
@@ -287,6 +287,7 @@ class AncestralFanChartModule extends AbstractModule implements ModuleChartInter
     private function getFanDegrees(): array
     {
         return [
+            90 => I18N::translate('90 degrees'),
             180 => I18N::translate('180 degrees'),
             210 => I18N::translate('210 degrees'),
             240 => I18N::translate('240 degrees'),
