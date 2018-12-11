@@ -1,6 +1,7 @@
 /**
  * See LICENSE.md file for further details.
  */
+import * as d3 from "./d3";
 import Gradient from "./gradient";
 import Click from "./arc/click";
 import Person from "./person";
@@ -24,9 +25,9 @@ export default class Arc
      */
     constructor(config, options, hierarchy)
     {
-        this.config    = config;
-        this.options   = options;
-        this.hierarchy = hierarchy;
+        this._config    = config;
+        this._options   = options;
+        this._hierarchy = hierarchy;
 
         this.init();
     }
@@ -40,11 +41,11 @@ export default class Arc
      */
     init()
     {
-        let personGroup = this.config.svg.select("g.personGroup");
-        let gradient    = new Gradient(this.config, this.options);
+        let personGroup = this._config.svg.select("g.personGroup");
+        let gradient    = new Gradient(this._config, this._options);
 
         personGroup.selectAll("g.person")
-            .data(this.hierarchy.nodes)
+            .data(this._hierarchy.nodes)
             .enter()
             .each(entry => {
                 let person = personGroup
@@ -53,17 +54,17 @@ export default class Arc
                     .attr("id", "person-" + entry.data.id)
                     .on("click", null);
 
-                new Person(this.config, this.options, this.hierarchy, person, entry);
+                new Person(this._config, this._options, this._hierarchy, person, entry);
 
-                if (this.options.showColorGradients) {
+                if (this._options.showColorGradients) {
                     gradient.init(entry);
                 }
             });
 
-        let click = new Click(this.config, this.options, this.hierarchy);
+        let click = new Click(this._config, this._options, this._hierarchy);
         click.bindClickEventListener();
 
-        gradient.addColorGroup(this.hierarchy)
+        gradient.addColorGroup(this._hierarchy)
             .style("opacity", 1);
     }
 }

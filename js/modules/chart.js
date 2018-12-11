@@ -120,6 +120,11 @@ export default class Chart
         let hierarchy = new Hierarchy(this._options.data, this._options);
         let arc       = new Arc(this._config, this._options, hierarchy);
 
+        this._config.div = d3.select("body")
+            .append("div")
+            .attr("class", "person-box")
+            .style("opacity", 1e-6);
+
         this.updateViewBox();
     }
 
@@ -159,9 +164,9 @@ export default class Chart
                 viewBoxHeight
             ]);
 
-        // Add rectangle element
+        // // Add rectangle element
         // this._config.svg
-        //     .append("rect")
+        //     .insert("rect", ":first-child")
         //     .attr("class", "background")
         //     .attr("width", "100%")
         //     .attr("height", "100%");

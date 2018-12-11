@@ -75,7 +75,7 @@ export default class Update
             this._config.svg
                 .selectAll("g.person:not(.remove)")
                 .selectAll("g.label:not(.old)")
-                .style("opacity", 0);
+                .style("opacity", 1e-6);
 
             this._gradient.addColorGroup(this._hierarchy)
                 .classed("new", true);
@@ -90,7 +90,7 @@ export default class Update
                 .selectAll("g.person.remove g.arc path")
                 .transition(t)
                 .style("fill", () => this._options.hideEmptySegments ? null : "rgb(240, 240, 240)")
-                .style("opacity", () => this._options.hideEmptySegments ? 0 : null);
+                .style("opacity", () => this._options.hideEmptySegments ? 1e-6 : null);
 
             // Fade in new arcs
             this._config.svg
@@ -103,7 +103,7 @@ export default class Update
             this._config.svg
                 .selectAll("g.person.update g.label.old, g.person.remove g.label.old, g.colorGroup:not(.new)")
                 .transition(t)
-                .style("opacity", 0);
+                .style("opacity", 1e-6);
 
             // Fade in all new labels and color group
             this._config.svg

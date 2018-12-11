@@ -67,12 +67,102 @@ export default class Person
 
         // Hovering
         person
-            .on("mouseover", function () {
-                d3.select(this).classed("hover", true);
+            .on("mouseover", this.mouseover.bind(this))
+            .on("mousemove", this.mousemove.bind(this))
+            .on("mouseout", this.mouseout.bind(this))
+            .on("contextmenu", this.contextmenu.bind(this))
+        ;
+    }
+
+    /**
+     * Handles the event when the right mouse button is clicked over an element.
+     *
+     * @param {Object} datum
+     * @param {Number} index
+     * @param {Array}  nodes
+     *
+     * @private
+     */
+    contextmenu(datum, index, nodes)
+    {
+        this._config.div
+            .selectAll("*")
+            .remove();
+
+        // Close context if mouse leaves the container
+        this._config.div
+            .on("mouseleave", () => {
+                this._config.div
+                    .transition()
+                    .duration(1000)
+                    .style("opacity", 1e-6)
+                    .selectAll("*")
+                    .remove();
             })
-            .on("mouseout", function () {
-                d3.select(this).classed("hover", false);
-            });
+
+        this._config.div
+            .append("div")
+            .attr("class", "details")
+            .append("a")
+            .attr("href", "URL")
+            .text(datum.data.name)
+            .append("ul")
+            .attr("class", "list")
+            .append("li")
+            .attr("class", "menu-chart-pedigree")
+            .append("a")
+            .attr("href", "PEDIGREE-CHART-URL")
+            .text("Ahnentafel");
+
+        this._config.div
+            .style("left", (d3.event.pageX - 34) + "px")
+            .style("top", (d3.event.pageY - 12) + "px")
+            .transition()
+            .duration(500)
+            .style("opacity", 1);
+    }
+
+    /**
+     * Handles the event when a pointing device is moved onto an element.
+     *
+     * @param {Object} datum
+     * @param {Number} index
+     * @param {Array}  nodes
+     *
+     * @private
+     */
+    mouseover(datum, index, nodes)
+    {
+        d3.select(nodes[index])
+            .classed("hover", true);
+    }
+
+    /**
+     * Handles the event when a pointing device is moved while over an element.
+     *
+     * @param {Object} datum
+     * @param {Number} index
+     * @param {Array}  nodes
+     *
+     * @private
+     */
+    mousemove(datum, index, nodes)
+    {
+    }
+
+    /**
+     * Handles the event when a pointing device is moved off an element.
+     *
+     * @param {Object} datum
+     * @param {Number} index
+     * @param {Array}  nodes
+     *
+     * @private
+     */
+    mouseout(datum, index, nodes)
+    {
+        d3.select(nodes[index])
+            .classed("hover", false);
     }
 
     /**
@@ -103,7 +193,7 @@ export default class Person
 
         // Hide arc initially if its new during chart update
         if (person.classed("new")) {
-            path.style("opacity", 0);
+            path.style("opacity", 1e-6);
         }
     }
 
