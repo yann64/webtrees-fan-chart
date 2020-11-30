@@ -41,7 +41,7 @@ export default class Configuration
         this._generations = generations;
 
         // Padding in pixel between each generation circle
-        this.circlePadding = 0;
+        this.circlePadding = 40; //0;
 
         this.padAngle = 0.03;
         this.padRadius = this.circlePadding * 10;
@@ -55,10 +55,10 @@ export default class Configuration
         this.centerCircleRadius = 85;
 
         // Height of each inner circle arc
-        this.innerArcHeight = 85;
+        this.innerArcHeight = this.circlePadding + 110;
 
         // Height of each outer circle arc
-        this.outerArcHeight = 110;
+        this.outerArcHeight = this.circlePadding + 110;
 
         // Width of the colored arc above each single person arc
         this.colorArcWidth = 5;

@@ -13,6 +13,7 @@ use Exception;
 use Fig\Http\Message\RequestMethodInterface;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Exceptions\IndividualNotFoundException;
+use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Module\AbstractModule;
@@ -264,7 +265,9 @@ class Module extends AbstractModule implements ModuleCustomInterface, ModuleChar
             return [];
         }
 
-        $data   = $this->getIndividualData($individual, $generation);
+        $data = $this->getIndividualData($individual, $generation);
+
+        /** @var Family $family */
         $family = $individual->childFamilies()->first();
 
         if ($family === null) {

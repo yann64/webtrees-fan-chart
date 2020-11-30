@@ -11,6 +11,7 @@ namespace MagicSunday\Webtrees\FanChart\Traits;
 use DOMDocument;
 use DOMNode;
 use DOMXPath;
+use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 
@@ -74,6 +75,7 @@ trait IndividualTrait
             'isAltRtl'         => $this->isRtl($alternativeNames),
             'sex'              => $individual->sex(),
             'timespan'         => $this->getLifetimeDescription($individual),
+            'marriage'         => $this->getParentMarriageDate($individual),
             'color'            => $this->getColor($individual),
             'colors'           => [[], []],
         ];
@@ -117,6 +119,18 @@ trait IndividualTrait
 
         if ($individual->isDead()) {
             return I18N::translate('Deceased');
+        }
+
+        return '';
+    }
+
+    private function getParentMarriageDate(Individual $individual): string
+    {
+        /** @var Family $family */
+        $family = $individual->childFamilies()->first();
+
+        if ($family) {
+            return strip_tags($family->getMarriageDate()->display());
         }
 
         return '';

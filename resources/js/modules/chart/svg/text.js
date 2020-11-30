@@ -100,8 +100,9 @@ export default class Text
                 this.addLastNames(text3, data);
                 this.truncateNames(text3, data, 1);
 
-                // Birth and death date
+                // Birth and death date and marriage date
                 if (data.depth < 6) {
+                    // Birth and death date
                     let text4 = this.createTextElement(parent, data)
                         .attr("class", "date")
                         .attr("dy", "2px");
@@ -113,6 +114,18 @@ export default class Text
 
             // Rotate outer labels in right position
             this.transformOuterText(parent, data);
+        }
+
+        // Marriage date
+        if (data.children && data.depth < 5) {
+            let text5     = this.createTextElement(parent, data);
+            let parentId5 = d3.select(parent.node().parentNode).attr("id");
+            let pathId5   = this.createPathDefinition(parentId5, 4, data);
+            let textPath5 = this.createTextPath(text5, pathId5)
+                .attr("class", "marriage-date");
+
+            this.addMarriageDate(textPath5, data);
+            this.truncateNames(textPath5, data, 4, true);
         }
     }
 
@@ -159,7 +172,7 @@ export default class Text
         let i = 0;
 
         for (let lastName of data.data.lastNames) {
-            // Create a <tspan> element for the last name
+            // Create a <tspan> element for each last name
             let tspan = parent.append("tspan")
                 .text(lastName);
 
@@ -188,7 +201,7 @@ export default class Text
         let i = 0;
 
         for (let alternativeName of data.data.alternativeNames) {
-            // Create a <tspan> element for the last name
+            // Create a <tspan> element for each alternative name
             let tspan = parent.append("tspan")
                 .text(alternativeName);
 
@@ -209,9 +222,24 @@ export default class Text
      */
     addTimeSpan(parent, data)
     {
-        // Create a <tspan> element for the last name
+        // Create a <tspan> element for the time span
         parent.append("tspan")
             .text(data.data.timespan);
+    }
+
+    /**
+     * Creates a single <tspan> element for the marriage date and append it to the parent element.
+     *
+     * @param {Selection} parent The parent (<text> or <textPath>) element to which the <tspan> elements are to be attached
+     * @param {Object}    data   The D3 data object containing the individual data
+     */
+    addMarriageDate(parent, data)
+    {
+        // Create a <tspan> element for the marriage date
+        if (data.data.marriage) {
+            parent.append("tspan")
+                .text("\u26AD " + data.data.marriage);
+        }
     }
 
     /**
@@ -343,8 +371,7 @@ export default class Text
     }
 
     /**
-     * Creates a new <path> definition and append it to the global definition list. The method
-     * returns the newly created <path> element id.
+     * Creates a new <path> definition and append it to the global definition list.
      *
      * @param {string} parentId The parent element id
      * @param {number} index    Index position of element in parent container. Required to create a unique path id.
@@ -374,7 +401,8 @@ export default class Text
             .innerRadius(this._geometry.relativeRadius(data.depth, this.getTextOffset(index, data)))
             .outerRadius(this._geometry.relativeRadius(data.depth, this.getTextOffset(index, data)));
 
-        arcGenerator.padAngle(this._configuration.padAngle)
+        arcGenerator
+            .padAngle(this._configuration.padAngle)
             .padRadius(this._configuration.padRadius)
             .cornerRadius(this._configuration.cornerRadius);
 
@@ -424,8 +452,8 @@ export default class Text
     {
         // First names, Last name, Alternate name, Date
         return this.isPositionFlipped(data.depth, data.x0, data.x1)
-            ? [23, 42, 61, 84][index]
-            : [73, 54, 35, 12][index];
+            ? [23, 42, 61, 84, -20][index]
+            : [73, 54, 35, 12, 120][index];
     }
 
     /**
